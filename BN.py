@@ -5,8 +5,8 @@ Created on Mon Oct 15 15:51:49 2018
 @author: mlopes
 """
 
-
-
+#import itertools
+from itertools import *
 class Node():
     def __init__(self, prob, parents = []):
         self.parents = parents
@@ -40,12 +40,6 @@ class BN():
         self.gra = gra
         self.prob = prob
 
-    def computePostProb(self, evid):
-        pass
-               
-        return 0
-        
-        
     def computeJointProb(self, evid):
         prod = 1
         tamanho = len(self.prob)
@@ -55,3 +49,23 @@ class BN():
             else:
                 prod = prod * self.prob[i].computeProb(evid)[1]
         return prod
+
+    def computePostProb(self, evid):
+        combos = []
+        x = ()
+        nx = ()
+        a = 0
+        for i in evid:
+            x += (i,)
+            nx += (i,)
+            if i == -1:
+                x += (1,)
+                nx += (0,)
+            if(i == []):
+                a += 1
+        combos += combinations_with_replacement([0,1], a)
+        combos += permutations([0, 1], a)
+        combos = list(set(combos))       
+        result = self.computeJointProb(x)/(self.computeJointProb(x)+self.computeJointProb(nx))
+        return result
+        
