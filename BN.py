@@ -51,40 +51,40 @@ class BN():
         return prod
 
     def computePostProb(self, evid):
+        x = []
+        nx = []
+        result1 = ()
+        result2 = ()
+        indexes = []
         combos = []
-        result = []
-        x = ()
-        nx = ()
-        a = 0
-        for i in evid: #esta a fazer bem
+        index = 0 
+        newEvid = list(evid)
+        for i in newEvid:
             if i == -1:
-                x += (1,)
-                nx += (0,)
-            elif(i == []):
-                x += ([],)
-                nx += ([],)
-                a += 1
+                x+=[1]
+                nx+=[0]
+            elif i == []:
+                indexes += [index]
+                x+=[[]]
+                nx+=[[]]
             else:
-                x += (i,)
-                nx += (i,)
-        combos += combinations_with_replacement([0,1], a) #combos a fazer bem
-        combos += permutations([0, 1], a)
+                x+=[i]
+                nx+=[i]
+            index+=1
+        combos += combinations_with_replacement([0,1], len(indexes))
+        combos += permutations([0, 1], len(indexes))
         combos = list(set(combos))
-        a = 0 
-        for i in range(len(x)):
-            newx = ()
-            newnx = () 
-            if x[i] == [] or nx[i] == []:
-                newx += (combos[a][0], )
-                newnx += (combos[a][1], )
-                a+=1
-            else:
-                newx += (x[i],)
-                newnx += (nx[i],)
+        for c in range(len(combos)):
+            i = 0
+            for index in indexes:
+                x[index] = combos[c][i]
+                nx[index] = combos[c][i]
+                i+=1
 
-            print(newnx)
-        #result += [self.computeJointProb(newx)/(self.computeJointProb(newx)+self.computeJointProb(newnx))]
-        #print("gajas")
-        #print(result)
+            #print(x)
+            result1+=(tuple(x),)
+            result2+=(tuple(nx),)
+            print(result1)
+
+        #print(result1)
         return 0
-        
