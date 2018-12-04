@@ -66,7 +66,8 @@ class finiteMDP:
         #trace: matriz com varios movimentos
         alpha = 0.65
         matrix_aux = np.zeros((self.nS, self.nA))
-        while(True):
+        flag = True
+        while(flag):
             matrix_aux = np.copy(self.Q)
             for mov in trace:
                 inicial_state = int(mov[0])
@@ -77,8 +78,8 @@ class finiteMDP:
                 for action in range(self.nA):
                     m = max(self.Q[final_state][action], m)
                 self.Q[inicial_state, action] = self.Q[inicial_state][action] + alpha*(reward + self.gamma * m - self.Q[inicial_state][action])
-            if np.all(abs(self.Q - matrix_aux) < 0.1):
-                break
+                if np.all(abs(self.Q - matrix_aux) < 0.1):
+                    flag = False
         return self.Q
     
     def policy(self, x, poltype = 'exploration', par = []):    
