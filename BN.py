@@ -14,7 +14,6 @@ class Node():
         self.parents = parents
         self.prob = prob
 
-    #Returns a list [a,b], where a is the probability of a node not happening and b is the probability of a node happening
     def computeProb(self, evid):
         parents_size = len(self.parents)
         parents_evidences = []
