@@ -7,6 +7,8 @@ Created on Mon Oct 15 15:51:49 2018
 
 #import itertools
 from itertools import *
+import numpy as np
+
 class Node():
     def __init__(self, prob, parents = []):
         self.parents = parents
@@ -15,25 +17,17 @@ class Node():
     #Returns a list [a,b], where a is the probability of a node not happening and b is the probability of a node happening
     def computeProb(self, evid):
         parents_size = len(self.parents)
-        parents_sublist = []
-        result_list = []
+        parents_evidences = []
         if(parents_size == 0):
-            result_list = [1-self.prob, self.prob]
+            return [1-self.prob, self.prob]
         else:
             for i in range(parents_size):
-                if(len(parents_sublist) == 0):
-                    result_list = [1, 0]
-                if(evid[i] == 0 and i != parents_size - 1):
-                    parents_sublist = self.prob[0]         
-                if(evid[i] == 0 and i == parents_size - 1 and len(parents_sublist) > 0):
-                    result_list.append(1 - parents_sublist[0])
-                    result_list.append(parents_sublist[0])
-                if(evid[i] == 1 and i != parents_size - 1):
-                    parents_sublist = self.prob[1]
-                if(evid[i] == 1 and i == parents_size - 1 and len(parents_sublist) >= 2):
-                    result_list.append(1 - parents_sublist[1])
-                    result_list.append(parents_sublist[1])                   
-        return result_list
+                parents_evidences.append(evid[self.parents[i]])
+            position = tuple(parents_evidences)
+            prob = self.prob[position]
+            return [1-prob,prob]
+        
+                
     
 class BN():
     def __init__(self, gra, prob):
@@ -53,8 +47,8 @@ class BN():
     def computePostProb(self, evid):
         x = []
         nx = []
-        result1 = ()
-        result2 = ()
+        result1 = []
+        result2 = []
         indexes = []
         combos = []
         index = 0 
@@ -80,11 +74,7 @@ class BN():
                 x[index] = combos[c][i]
                 nx[index] = combos[c][i]
                 i+=1
-
-            #print(x)
-            result1+=(tuple(x),)
-            result2+=(tuple(nx),)
-            print(result1)
-
-        #print(result1)
-        return 0
+            result1+=[self.computeJointProb(tuple(x))]
+            result2+=[self.computeJointProb(tuple(nx))]
+        total = sum(result1 / (sum(result1)+sum(result2)))
+        return total
