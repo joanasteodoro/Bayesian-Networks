@@ -76,13 +76,15 @@ class finiteMDP:
                 reward = int(mov[3])
                 m = max(self.Q[final_state,:])
                 self.Q[inicial_state, action] = self.Q[inicial_state][action] + alpha*(reward + self.gamma * m - self.Q[inicial_state][action])
-                if np.all(abs(self.Q - matrix_aux) < 0.01):
-                    flag = False
+            if np.all(abs(matrix_aux - self.Q) < 0.01):
+                flag = False
         return self.Q
     
-    def policy(self, x, poltype = 'exploration', par = []):    
+    def policy(self, x, poltype = 'exploration', par = []):
+        if par == []:
+            par = self.Q    
         if poltype == 'exploitation':
-            m = int(np.argmax(self.Q[x]))  
+            m = int(np.argmax(par[x]))  
         elif poltype == 'exploration':
             m = random.randint(0, self.nA-1)
         return m
