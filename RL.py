@@ -62,22 +62,34 @@ class finiteMDP:
 
             
     def traces2Q(self, trace):
-                # implementar esta funcao
-        
-
+        #estado incial, acao, estado final, recompensa
+        #trace: matriz com varios movimentos
+        alpha = 0.65
+        matrix_aux = np.zeros((self.nS, self.nA))
+        while(True):
+            matrix_aux = np.copy(self.Q)
+            for mov in trace:
+                inicial_state = int(mov[0])
+                action = int(mov[1])
+                final_state = int(mov[2])
+                reward = int(mov[3])
+                m = 0
+                for action in range(self.nA):
+                    m = max(self.Q[final_state][action], m)
+                self.Q[inicial_state, action] = self.Q[inicial_state][action] + alpha*(reward + self.gamma * m - self.Q[inicial_state][action])
+            if np.all(abs(self.Q - matrix_aux) < 0.1):
+                break
         return self.Q
     
-    def policy(self, x, poltype = 'exploration', par = []):
-        # implementar esta funcao
-        
+    def policy(self, x, poltype = 'exploration', par = []):    
         if poltype == 'exploitation':
-            pass
-
-            
+            m = 0
+            for action in range(self.nA):
+                if(self.Q[x][action] > m):
+                    a = action            
         elif poltype == 'exploration':
-            pass
-
-                
+            a = random.randint(0, self.nA-1)
+      
         return a
     
     def Q2pol(self, Q, eta=5):
