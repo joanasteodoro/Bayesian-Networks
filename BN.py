@@ -52,37 +52,39 @@ class BN():
 
     def computePostProb(self, evid):
         combos = []
-        result = 0
+        result = []
         x = ()
         nx = ()
         a = 0
-        for i in evid:
-            x += (i,)
-            nx += (i,)
+        for i in evid: #esta a fazer bem
             if i == -1:
                 x += (1,)
                 nx += (0,)
-            if(i == []):
+            elif(i == []):
                 x += ([],)
                 nx += ([],)
                 a += 1
-        combos += combinations_with_replacement([0,1], a)
+            else:
+                x += (i,)
+                nx += (i,)
+        combos += combinations_with_replacement([0,1], a) #combos a fazer bem
         combos += permutations([0, 1], a)
         combos = list(set(combos))
-        a = 0
-        newx = ()
-        newnx = ()  
-        for i in range(len(evid)):
-            newx += (x[i],)
-            newnx += (nx[i],)
-            if evid[i] == []:
-                newnx += (combos[a][0], )
+        a = 0 
+        for i in range(len(x)):
+            newx = ()
+            newnx = () 
+            if x[i] == [] or nx[i] == []:
+                newx += (combos[a][0], )
                 newnx += (combos[a][1], )
                 a+=1
-                #result += [self.computeJointProb(newx)/(self.computeJointProb(newx)+self.computeJointProb(newnx))]
-                print ("newx\n")
-                print (newx)
-                print ("newnx\n")
-                print (newnx)
-        return result
+            else:
+                newx += (x[i],)
+                newnx += (nx[i],)
+
+            print(newnx)
+        #result += [self.computeJointProb(newx)/(self.computeJointProb(newx)+self.computeJointProb(newnx))]
+        #print("gajas")
+        #print(result)
+        return 0
         
