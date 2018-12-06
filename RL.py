@@ -1,3 +1,5 @@
+''' 86440 - Joana Silva Teodoro e 86482 - Miguel Antonio Oliveira Rocha - Grupo 24'''
+
 # -*- coding: utf-8 -*-
 """
 Created on Mon Oct 16 20:31:54 2017
